@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
-  "version": "${version}",
+  "id": "build-a-better-crossbow",
+  "version": "0.0.1",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Build a Better Crossbow",
+  "description": "A server-side mod to improve the vanilla crossbox in a balanced manner.",
   "authors": [
-    "Me!"
+    "LT_Schmiddy"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/LTSchmiddy/",
+    "sources": "https://github.com/LTSchmiddy/mc-build-a-better-crossbow-mod"
   },
 
   "license": "CC0-1.0",
@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.lt_schmiddy.bettercrossbow.ModEntry"
     ]
   },
   "mixins": [
