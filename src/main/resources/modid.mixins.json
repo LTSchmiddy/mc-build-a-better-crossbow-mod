@@ -4,7 +4,13 @@
   "package": "net.lt_schmiddy.bettercrossbow.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BetterQuickchargeMixin"
+    "BetterMultishotMixin",
+    "BetterQuickchargeMixin",
+    "CrossbowEnchantmentHandlerMixin",
+    "FlameEnchantOnCrossbowMixin",
+    "InfinityEnchantOnCrossbowMixin",
+    "PowerEnchantOnCrossbowMixin",
+    "PunchEnchantOnCrossbowMixin"
   ],
   "client": [
   ],
