@@ -93,13 +93,13 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
             arrowEntity.setOnFireFor(100);
         }
 
-        //Piercing increases arrow damage:
+        // Piercing increases arrow damage:
         int piercingLevel = EnchantmentHelper.getLevel(Enchantments.PIERCING, crossbow);
         if (piercingLevel > 0) {
-            arrowEntity.setDamage(arrowEntity.getDamage() * (1 + (float)(piercingLevel)/2));
+            arrowEntity.setDamage(arrowEntity.getDamage() * (1 + (float)(piercingLevel) * 0.05));
         }
 
-        System.out.println(arrowEntity.getDamage());
+        // System.out.println(arrowEntity.getDamage());
 	}
 
     // Changing loaded arrow count:
@@ -174,8 +174,15 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         // System.out.println("spreadWitdh: " + spreadWidth);
 
         for(int i = 0; i < list.size(); ++i) {
-           ItemStack itemStack = (ItemStack)list.get(i);
-           boolean bl = entity instanceof PlayerEntity && (((PlayerEntity)entity).abilities.creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0);
+            ItemStack itemStack = (ItemStack)list.get(i);
+            boolean bl = 
+                entity instanceof PlayerEntity 
+                && (
+                    ((PlayerEntity)entity).abilities.creativeMode 
+                    || EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0
+                    || EnchantmentHelper.getLevel(Enchantments.MULTISHOT, stack) > 0
+                    || EnchantmentHelper.getLevel(Enchantments.PIERCING, stack) > 0
+                );
 
            if (!itemStack.isEmpty()) {
                 if (i == 0 || spreadingArrowCount < 2) {
