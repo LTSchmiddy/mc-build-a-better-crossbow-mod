@@ -30,31 +30,6 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
 	public CrossbowEnchantmentHandlerMixin(Settings settings) {
         super(settings);
     }
-    // // Accessors:
-    // @Invoker("loadProjectile")
-    // public static boolean invokeLoadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
-    //     throw new AbstractMethodError();
-    // }
-    
-    // @Invoker("getProjectiles")
-    // public static List<ItemStack> invokeGetProjectiles(ItemStack stack) {
-    //     throw new AbstractMethodError();
-    // }
-    
-    // @Invoker("getSoundPitches")
-    // public static float[] invokeGetSoundPitches(Random random) {
-    //     throw new AbstractMethodError();
-    // }
-
-    // @Invoker("shoot")
-    // public static void invokeShoot(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
-    //     throw new AbstractMethodError();
-    // }
-
-    // @Invoker("postShoot")
-    // public static void invokePostShoot(World world, LivingEntity entity, ItemStack stack) {
-    //     throw new AbstractMethodError();
-    // }
 
     @Shadow
     private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
