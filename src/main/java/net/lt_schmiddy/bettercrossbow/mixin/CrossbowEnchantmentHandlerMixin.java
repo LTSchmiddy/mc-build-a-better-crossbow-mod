@@ -5,7 +5,7 @@ import java.util.Random;
 
 // import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Invoker;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,38 +30,62 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
 	public CrossbowEnchantmentHandlerMixin(Settings settings) {
         super(settings);
     }
-    // Accessors:
-    @Invoker("loadProjectile")
-    public static boolean invokeLoadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
+    // // Accessors:
+    // @Invoker("loadProjectile")
+    // public static boolean invokeLoadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
+    //     throw new AbstractMethodError();
+    // }
+    
+    // @Invoker("getProjectiles")
+    // public static List<ItemStack> invokeGetProjectiles(ItemStack stack) {
+    //     throw new AbstractMethodError();
+    // }
+    
+    // @Invoker("getSoundPitches")
+    // public static float[] invokeGetSoundPitches(Random random) {
+    //     throw new AbstractMethodError();
+    // }
+
+    // @Invoker("shoot")
+    // public static void invokeShoot(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
+    //     throw new AbstractMethodError();
+    // }
+
+    // @Invoker("postShoot")
+    // public static void invokePostShoot(World world, LivingEntity entity, ItemStack stack) {
+    //     throw new AbstractMethodError();
+    // }
+
+    @Shadow
+    private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
+        throw new AbstractMethodError();
+    }
+
+    @Shadow
+    public static List<ItemStack> getProjectiles(ItemStack stack) {
         throw new AbstractMethodError();
     }
     
-    @Invoker("getProjectiles")
-    public static List<ItemStack> invokeGetProjectiles(ItemStack stack) {
+    @Shadow
+    public static float[] getSoundPitches(Random random) {
         throw new AbstractMethodError();
     }
+
+    @Shadow
+    public static void shoot(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
+        throw new AbstractMethodError();
+    }
+
+    @Shadow
+    public static void postShoot(World world, LivingEntity entity, ItemStack stack) {
+        throw new AbstractMethodError();
+    }
+
     
-    @Invoker("getSoundPitches")
-    public static float[] invokeGetSoundPitches(Random random) {
-        throw new AbstractMethodError();
-    }
-
-    @Invoker("shoot")
-    public static void invokeShoot(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
-        throw new AbstractMethodError();
-    }
-
-    @Invoker("postShoot")
-    public static void invokePostShoot(World world, LivingEntity entity, ItemStack stack) {
-        throw new AbstractMethodError();
-    }
-
     // Apply Enchantments to Fired Arrows:
     @Inject(
         at = @At("RETURN"),
         method = "createArrow(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;",
-        // method = "createArrow",
-        // locals = LocalCapture.CAPTURE_FAILEXCEPTION,
         cancellable = true
     )
 	private static void apply_enchantments_to_arrows (
@@ -70,7 +94,6 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         ItemStack crossbow, 
         ItemStack arrow, 
         CallbackInfoReturnable<PersistentProjectileEntity> info 
-        // PersistentProjectileEntity persistentProjectileEntity
     ) {
         PersistentProjectileEntity arrowEntity = info.getReturnValue();
         
@@ -93,25 +116,17 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
             arrowEntity.setOnFireFor(100);
         }
 
-        // Piercing increases arrow damage:
-        int piercingLevel = EnchantmentHelper.getLevel(Enchantments.PIERCING, crossbow);
-        if (piercingLevel > 0) {
-            arrowEntity.setDamage(arrowEntity.getDamage() * (1 + (float)(piercingLevel) * 0.05));
-        }
-
         // System.out.println(arrowEntity.getDamage());
 	}
 
     // Changing loaded arrow count:
     @Inject(
-        // at = @At(value="", target="net/minecraft/entity/LivingEntity/getArrowType(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"),
         at = @At("HEAD"),
         method = "loadProjectiles",
         // locals = LocalCapture.CAPTURE_FAILEXCEPTION,
         cancellable = true
     )
     private static void load_more_projectiles(LivingEntity shooter, ItemStack projectile, CallbackInfoReturnable<Object> info){
-        // System.out.println("Using overridden loadProjectiles");
         info.cancel();
 
         int i = EnchantmentHelper.getLevel(Enchantments.MULTISHOT, projectile);
@@ -132,7 +147,7 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
             }
 
             
-            if (!invokeLoadProjectile(shooter, projectile, itemStack, k > 0, bl)) {
+            if (!loadProjectile(shooter, projectile, itemStack, k > 0, bl)) {
                 info.setReturnValue(false);
                 return;
             }
@@ -147,20 +162,30 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
     @Inject(
         at = @At("HEAD"),
         method = "shootAll",
-        // locals = LocalCapture.CAPTURE_FAILEXCEPTION,
         cancellable = true
     )
     private static void shootAll_override(World world, LivingEntity entity, Hand hand, ItemStack stack, float speed, float divergence, CallbackInfo info) {
         // System.out.println("Using overridden shootAll");
         
-        List<ItemStack> list = invokeGetProjectiles(stack);
-        float[] fs = invokeGetSoundPitches(entity.getRandom());
+        List<ItemStack> list = getProjectiles(stack);
+        float[] fs = getSoundPitches(entity.getRandom());
         
         //Piercing increases arrow speed:
+        int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
         int piercingLevel = EnchantmentHelper.getLevel(Enchantments.PIERCING, stack);
+        // System.out.println("==================================");
+        // System.out.println("start speed: " + speed);
+        // System.out.println("quickChargeLevel: " + quickChargeLevel);
+        // System.out.println("piercingLevel: " + piercingLevel);
+
         if (piercingLevel > 0) {
-            speed = speed * (1 + (float)(piercingLevel)/2);
+            float piercing_mod = ((float)(piercingLevel) * 0.25f);
+            float qf_mod = (1.0f - (float)(quickChargeLevel) * 0.1f);
+            // System.out.println("piercing_mod: " + piercing_mod);
+            // System.out.println("qf_mod: " + qf_mod);
+            speed = speed + speed * (piercing_mod * qf_mod);
         }
+        // System.out.println("stop speed: " + speed);
         
         // Store these values in a config later:
         float spreadMin = -10.0F;
@@ -186,24 +211,18 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
 
            if (!itemStack.isEmpty()) {
                 if (i == 0 || spreadingArrowCount < 2) {
-                    invokeShoot(world, entity, hand, stack, itemStack, fs[i % 3], bl, speed, divergence, 0.0F);
+                    shoot(world, entity, hand, stack, itemStack, fs[i % 3], bl, speed, divergence, 0.0F);
                 } else {
                     int spreadingArrow = i - 1;
                     float spread = spreadMin + spreadWidth * ((float)(spreadingArrow)/(float)(spreadingArrowCount - 1));
                     // System.out.println("spreadingArrow: " + spreadingArrow);
                     // System.out.println("spread: " + spread);
-                    invokeShoot(world, entity, hand, stack, itemStack, fs[i % 3], bl, speed, divergence, spread);
+                    shoot(world, entity, hand, stack, itemStack, fs[i % 3], bl, speed, divergence, spread);
                 }
-                
-                // } else if (i == 1) {
-                //     invokeShoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, -10.0F);
-                // } else if (i == 2) {
-                //     invokeShoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 10.0F);
-                // }
             }
         }
         
-        invokePostShoot(world, entity, stack);
+        postShoot(world, entity, stack);
         info.cancel();
     }
 
