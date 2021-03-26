@@ -24,9 +24,14 @@ import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
+import net.lt_schmiddy.bettercrossbow.BetterCrossbowMod;
 
 @Mixin(net.minecraft.item.CrossbowItem.class)
 public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
+
+    private static final float spreadMin = -10.0F;
+    private static final float spreadMax = 10.0F;
+
 	public CrossbowEnchantmentHandlerMixin(Settings settings) {
         super(settings);
     }
@@ -141,7 +146,8 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
     )
     private static void shootAll_override(World world, LivingEntity entity, Hand hand, ItemStack stack, float speed, float divergence, CallbackInfo info) {
         // System.out.println("Using overridden shootAll");
-        
+        info.cancel();
+
         List<ItemStack> list = getProjectiles(stack);
         float[] fs = getSoundPitches(entity.getRandom());
         
@@ -153,18 +159,15 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         // System.out.println("quickChargeLevel: " + quickChargeLevel);
         // System.out.println("piercingLevel: " + piercingLevel);
 
-        if (piercingLevel > 0) {
-            float piercing_mod = ((float)(piercingLevel) * 0.25f);
-            float qf_mod = (1.0f - (float)(quickChargeLevel) * 0.1f);
+        if (BetterCrossbowMod.piercingSpeedUpArrows && piercingLevel > 0) {
+            float piercing_mod = ((float)(piercingLevel) * BetterCrossbowMod.piercingSpeedIncreasePerLevel);
+            float qf_mod = (1.0f - (float)(quickChargeLevel) * BetterCrossbowMod.piercingSpeedReductionPerQuickchargeLevel);
             // System.out.println("piercing_mod: " + piercing_mod);
             // System.out.println("qf_mod: " + qf_mod);
             speed = speed + speed * (piercing_mod * qf_mod);
         }
         // System.out.println("stop speed: " + speed);
         
-        // Store these values in a config later:
-        float spreadMin = -10.0F;
-        float spreadMax = 10.0F;
 
         float spreadWidth = spreadMax - spreadMin;
         int spreadingArrowCount = list.size() - 1;
@@ -180,8 +183,13 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
                 && (
                     ((PlayerEntity)entity).abilities.creativeMode 
                     || EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0
-                    || EnchantmentHelper.getLevel(Enchantments.MULTISHOT, stack) > 0
-                    || EnchantmentHelper.getLevel(Enchantments.PIERCING, stack) > 0
+                    || (
+                        BetterCrossbowMod.cantRecoverPiercingMultishotArrows
+                        && (
+                            EnchantmentHelper.getLevel(Enchantments.MULTISHOT, stack) > 0
+                            || EnchantmentHelper.getLevel(Enchantments.PIERCING, stack) > 0
+                        )
+                    )
                 );
 
            if (!itemStack.isEmpty()) {
@@ -198,7 +206,7 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         }
         
         postShoot(world, entity, stack);
-        info.cancel();
+
     }
 
 }

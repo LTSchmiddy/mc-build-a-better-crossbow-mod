@@ -3,6 +3,8 @@ package net.lt_schmiddy.bettercrossbow.mixin;
 import java.util.Iterator;
 import java.util.List;
 import java.util.OptionalInt;
+
+import net.lt_schmiddy.bettercrossbow.BetterCrossbowMod;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingItemEntity;
@@ -34,8 +36,6 @@ public abstract class MoreFireworksDamageMixin extends Entity implements FlyingI
         super(entityType, world);
     }
 
-    private static float powerMult = 1.0f;
-    private static int minChargesForDestruction = 4;
 
     @Shadow
     private static TrackedData<ItemStack> ITEM;
@@ -63,6 +63,10 @@ public abstract class MoreFireworksDamageMixin extends Entity implements FlyingI
 
     @Inject(at = @At("HEAD"), method = "explode", cancellable = true)
     void stronger_explode(CallbackInfo info) {
+        if (!BetterCrossbowMod.explodingFireworks){
+            return;
+        }
+
         info.cancel();
 
         // System.out.println("Using overridden rocket explosion logic.");
@@ -82,8 +86,8 @@ public abstract class MoreFireworksDamageMixin extends Entity implements FlyingI
                 this.getX(), 
                 this.getY(), 
                 this.getZ(), 
-                4.0F * (0.2f * (float)charges) * powerMult, 
-                charges >= minChargesForDestruction ? Explosion.DestructionType.BREAK : Explosion.DestructionType.NONE
+                4.0F * (0.2f * (float)charges) * BetterCrossbowMod.fireworkExplosionMult, 
+                charges >= BetterCrossbowMod.fireworkMinChargesForBreaking ? Explosion.DestructionType.BREAK : Explosion.DestructionType.NONE
             );
         }
     }

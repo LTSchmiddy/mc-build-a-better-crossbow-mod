@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 // import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.lt_schmiddy.bettercrossbow.BetterCrossbowMod;
+
 // import net.minecraft.enchantment.QuickChargeEnchantment;
 
 
@@ -15,6 +17,6 @@ public class BetterMultishotMixin {
 	@Inject(at = @At("RETURN"), method = "getMaxLevel()I", cancellable = true)
 	private void init(CallbackInfoReturnable<Object> info) {
 		
-		info.setReturnValue(4);
+		info.setReturnValue(BetterCrossbowMod.maxMultishotLevel);
 	}
 }
