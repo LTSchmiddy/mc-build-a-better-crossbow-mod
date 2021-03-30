@@ -30,31 +30,6 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
 	public CrossbowEnchantmentHandlerMixin(Settings settings) {
         super(settings);
     }
-    // // Accessors:
-    // @Invoker("loadProjectile")
-    // public static boolean invokeLoadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
-    //     throw new AbstractMethodError();
-    // }
-    
-    // @Invoker("getProjectiles")
-    // public static List<ItemStack> invokeGetProjectiles(ItemStack stack) {
-    //     throw new AbstractMethodError();
-    // }
-    
-    // @Invoker("getSoundPitches")
-    // public static float[] invokeGetSoundPitches(Random random) {
-    //     throw new AbstractMethodError();
-    // }
-
-    // @Invoker("shoot")
-    // public static void invokeShoot(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
-    //     throw new AbstractMethodError();
-    // }
-
-    // @Invoker("postShoot")
-    // public static void invokePostShoot(World world, LivingEntity entity, ItemStack stack) {
-    //     throw new AbstractMethodError();
-    // }
 
     @Shadow
     private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
@@ -98,10 +73,11 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         PersistentProjectileEntity arrowEntity = info.getReturnValue();
         
         //Increasing Base Damage:
-        // arrowEntity.setDamage(arrowEntity.getDamage() + 1.0D); 
+        arrowEntity.setDamage(arrowEntity.getDamage() + 2.0D);
 
         // Adding effects for enchantments to arrows. This is straight out of the BowItem firing code.
         // - Power
+
         int powerLevel = EnchantmentHelper.getLevel(Enchantments.POWER, crossbow);
         if (powerLevel > 0) {
             arrowEntity.setDamage(arrowEntity.getDamage() + (double)powerLevel * 0.5D + 0.5D);
@@ -115,15 +91,12 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         if (EnchantmentHelper.getLevel(Enchantments.FLAME, crossbow) > 0) {
             arrowEntity.setOnFireFor(100);
         }
-
-        // System.out.println(arrowEntity.getDamage());
 	}
 
     // Changing loaded arrow count:
     @Inject(
         at = @At("HEAD"),
         method = "loadProjectiles",
-        // locals = LocalCapture.CAPTURE_FAILEXCEPTION,
         cancellable = true
     )
     private static void load_more_projectiles(LivingEntity shooter, ItemStack projectile, CallbackInfoReturnable<Object> info){
@@ -165,27 +138,19 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         cancellable = true
     )
     private static void shootAll_override(World world, LivingEntity entity, Hand hand, ItemStack stack, float speed, float divergence, CallbackInfo info) {
-        // System.out.println("Using overridden shootAll");
         
         List<ItemStack> list = getProjectiles(stack);
         float[] fs = getSoundPitches(entity.getRandom());
         
         //Piercing increases arrow speed:
-        int quickChargeLevel = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
         int piercingLevel = EnchantmentHelper.getLevel(Enchantments.PIERCING, stack);
-        // System.out.println("==================================");
-        // System.out.println("start speed: " + speed);
-        // System.out.println("quickChargeLevel: " + quickChargeLevel);
-        // System.out.println("piercingLevel: " + piercingLevel);
 
         if (piercingLevel > 0) {
-            float piercing_mod = ((float)(piercingLevel) * 0.25f);
-            float qf_mod = (1.0f - (float)(quickChargeLevel) * 0.1f);
+            float piercing_mod = ((float)(piercingLevel) * 0.125f);
             // System.out.println("piercing_mod: " + piercing_mod);
             // System.out.println("qf_mod: " + qf_mod);
-            speed = speed + speed * (piercing_mod * qf_mod);
+            speed = speed + speed * (piercing_mod);
         }
-        // System.out.println("stop speed: " + speed);
         
         // Store these values in a config later:
         float spreadMin = -10.0F;
@@ -193,10 +158,6 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
 
         float spreadWidth = spreadMax - spreadMin;
         int spreadingArrowCount = list.size() - 1;
-        // System.out.println("spreadingArrowCount: " + spreadingArrowCount);
-        // System.out.println("spreadMin: " + spreadMin);
-        // System.out.println("spreadMax: " + spreadMax);
-        // System.out.println("spreadWitdh: " + spreadWidth);
 
         for(int i = 0; i < list.size(); ++i) {
             ItemStack itemStack = (ItemStack)list.get(i);
@@ -215,8 +176,6 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
                 } else {
                     int spreadingArrow = i - 1;
                     float spread = spreadMin + spreadWidth * ((float)(spreadingArrow)/(float)(spreadingArrowCount - 1));
-                    // System.out.println("spreadingArrow: " + spreadingArrow);
-                    // System.out.println("spread: " + spread);
                     shoot(world, entity, hand, stack, itemStack, fs[i % 3], bl, speed, divergence, spread);
                 }
             }
