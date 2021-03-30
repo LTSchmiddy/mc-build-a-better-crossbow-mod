@@ -1,7 +1,5 @@
 package net.lt_schmiddy.bettercrossbow.mixin;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.OptionalInt;
 
 import net.lt_schmiddy.bettercrossbow.BetterCrossbowMod;

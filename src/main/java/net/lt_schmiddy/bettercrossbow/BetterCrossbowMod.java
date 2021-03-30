@@ -1,7 +1,6 @@
 package net.lt_schmiddy.bettercrossbow;
 
 import net.fabricmc.api.ModInitializer;
-import net.lt_schmiddy.bettercrossbow.SimpleConfig;
 
 public class BetterCrossbowMod implements ModInitializer {
 
