@@ -14,6 +14,8 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 
+import net.lt_schmiddy.bettercrossbow.ModEntry;
+
 @Mixin(net.minecraft.enchantment.QuickChargeEnchantment.class)
 public class BetterQuickchargeMixin extends Enchantment {
 	protected BetterQuickchargeMixin(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes) {
@@ -24,11 +26,15 @@ public class BetterQuickchargeMixin extends Enchantment {
 	@Inject(at = @At("RETURN"), method = "getMaxLevel()I", cancellable = true)
 	private void init(CallbackInfoReturnable<Object> info) {
 		
-		info.setReturnValue(5);
+		info.setReturnValue(ModEntry.maxQuickChargeLevel);
 	}
 
 	@Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) && EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) == 0;
+        return super.isAcceptableItem(stack)
+		&& (
+			EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) == 0
+			|| !ModEntry.infinityQuickchargeConflict
+		);
     }
 }

@@ -16,6 +16,8 @@ import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 
+import net.lt_schmiddy.bettercrossbow.ModEntry;
+
 @Mixin(net.minecraft.enchantment.InfinityEnchantment.class)
 public class InfinityEnchantOnCrossbowMixin extends Enchantment {
 
@@ -26,9 +28,17 @@ public class InfinityEnchantOnCrossbowMixin extends Enchantment {
 
 	@Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) || (stack.getItem() instanceof RangedWeaponItem 
-            && EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack) == 0
-            && EnchantmentHelper.getLevel(Enchantments.MENDING, stack) == 0)
-        ;
+        return super.isAcceptableItem(stack) 
+        || (
+			ModEntry.infinityOnCrossbow 
+			&& (
+                stack.getItem() instanceof RangedWeaponItem 
+                && (
+                    EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack) == 0
+                    || !ModEntry.infinityQuickchargeConflict
+                )
+                && EnchantmentHelper.getLevel(Enchantments.MENDING, stack) == 0
+            )
+        );
     }
 }

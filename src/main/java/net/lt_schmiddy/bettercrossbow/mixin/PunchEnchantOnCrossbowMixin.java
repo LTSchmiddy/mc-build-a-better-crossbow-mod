@@ -14,10 +14,9 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.RangedWeaponItem;
 
-
+import net.lt_schmiddy.bettercrossbow.ModEntry;
 @Mixin(net.minecraft.enchantment.PunchEnchantment.class)
 public class PunchEnchantOnCrossbowMixin extends Enchantment {
-
 
 	protected PunchEnchantOnCrossbowMixin(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes) {
 		super(weight, type, slotTypes);
@@ -25,7 +24,11 @@ public class PunchEnchantOnCrossbowMixin extends Enchantment {
 
 	@Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) || stack.getItem() instanceof RangedWeaponItem;
+        return super.isAcceptableItem(stack)
+		|| (
+			ModEntry.punchOnCrossbow 
+			&& stack.getItem() instanceof RangedWeaponItem
+		);
     }
 }
 
