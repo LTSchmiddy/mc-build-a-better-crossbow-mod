@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "build-a-better-crossbow",
-  "version": "0.0.1",
+  "version": "${version}",
 
   "name": "Build a Better Crossbow",
   "description": "A server-side mod to improve the vanilla crossbow in a balanced manner.",
@@ -23,7 +23,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "build-a-better-crossbow.mixins.json"
   ],
 
   "depends": {

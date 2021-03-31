@@ -1,6 +1,7 @@
 package net.lt_schmiddy.bettercrossbow;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.enchantment.Enchantments;
 
 
 public class ModEntry implements ModInitializer {
@@ -38,6 +39,9 @@ public class ModEntry implements ModInitializer {
 
 		System.out.println("Loading the 'Build a Better Crossbow' mod...");
 		loadConfig();
+
+		System.out.println("Quickcharge Max: " + Enchantments.QUICK_CHARGE.getMaxLevel());
+        System.out.println("Multishot Max: " + Enchantments.MULTISHOT.getMaxLevel());
 	}
 
 	public void loadConfig() {

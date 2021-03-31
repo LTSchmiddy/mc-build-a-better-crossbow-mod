@@ -23,10 +23,18 @@ public class BetterQuickchargeMixin extends Enchantment {
 		//TODO Auto-generated constructor stub
 	}
 
-	@Inject(at = @At("RETURN"), method = "getMaxLevel()I", cancellable = true)
-	private void init(CallbackInfoReturnable<Object> info) {
-		
-		info.setReturnValue(ModEntry.maxQuickChargeLevel);
+	// @Inject(at = @At("RETURN"), method = "getMaxLevel()I", cancellable = true)
+	// private void init(CallbackInfoReturnable<Object> info) {
+	// 	// info.cancel();
+	// 	// info.setReturnValue(ModEntry.maxQuickChargeLevel);
+	// 	System.out.println("ModEntry.maxQuickChargeLevel : " + ModEntry.maxQuickChargeLevel);
+	// 	info.setReturnValue(5);
+	// }
+
+	@Override
+	public int getMaxLevel() {
+		// System.out.println("ModEntry.maxQuickChargeLevel : " + ModEntry.maxQuickChargeLevel);
+		return ModEntry.maxQuickChargeLevel;
 	}
 
 	@Override

@@ -148,7 +148,7 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         cancellable = true
     )
     private static void shootAll_override(World world, LivingEntity entity, Hand hand, ItemStack stack, float speed, float divergence, CallbackInfo info) {
-        
+
         List<ItemStack> list = getProjectiles(stack);
         float[] fs = getSoundPitches(entity.getRandom());
         
