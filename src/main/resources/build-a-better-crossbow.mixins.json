@@ -13,8 +13,6 @@
     "PowerEnchantOnCrossbowMixin",
     "PunchEnchantOnCrossbowMixin"
   ],
-  "client": [
-  ],
   "injectors": {
     "defaultRequire": 1
   }

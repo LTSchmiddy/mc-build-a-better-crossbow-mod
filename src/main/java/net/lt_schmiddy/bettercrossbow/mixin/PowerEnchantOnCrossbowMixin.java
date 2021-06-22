@@ -14,7 +14,9 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.RangedWeaponItem;
 
-import net.lt_schmiddy.bettercrossbow.BetterCrossbowMod;
+
+import net.lt_schmiddy.bettercrossbow.ModEntry;
+
 
 @Mixin(net.minecraft.enchantment.PowerEnchantment.class)
 public class PowerEnchantOnCrossbowMixin extends Enchantment {
@@ -26,7 +28,14 @@ public class PowerEnchantOnCrossbowMixin extends Enchantment {
 
 	@Override
     public boolean isAcceptableItem(ItemStack stack) {
+<<<<<<< HEAD
         return super.isAcceptableItem(stack) || (stack.getItem() instanceof RangedWeaponItem && BetterCrossbowMod.powerOnCrossbow);
+=======
+        return super.isAcceptableItem(stack) || (
+			ModEntry.powerOnCrossbow 
+			&& stack.getItem() instanceof RangedWeaponItem
+		);
+>>>>>>> origin/no-power
     }
 }
 
