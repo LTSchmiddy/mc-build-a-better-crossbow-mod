@@ -15,7 +15,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.RangedWeaponItem;
 
 
-import net.lt_schmiddy.bettercrossbow.ModEntry;
+import net.lt_schmiddy.bettercrossbow.config.ConfigHandler;
 
 @Mixin(net.minecraft.enchantment.PunchEnchantment.class)
 public class PunchEnchantOnCrossbowMixin extends Enchantment {
@@ -28,7 +28,7 @@ public class PunchEnchantOnCrossbowMixin extends Enchantment {
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack)
 		|| (
-			ModEntry.punchOnCrossbow 
+			ConfigHandler.config.punchOnCrossbow 
 			&& stack.getItem() instanceof RangedWeaponItem
 		);
     }

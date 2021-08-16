@@ -10,12 +10,13 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.RangedWeaponItem;
 
-
-import net.lt_schmiddy.bettercrossbow.ModEntry;
+import net.lt_schmiddy.bettercrossbow.config.ConfigHandler;
 
 
 @Mixin(net.minecraft.enchantment.PowerEnchantment.class)
@@ -28,10 +29,13 @@ public class PowerEnchantOnCrossbowMixin extends Enchantment {
 
 	@Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) || (
-			ModEntry.powerOnCrossbow 
-			&& stack.getItem() instanceof RangedWeaponItem
-		);
+        return (
+			super.isAcceptableItem(stack)
+			|| (
+				ConfigHandler.config.powerOnCrossbow 
+				&& stack.getItem() instanceof RangedWeaponItem
+			)
+		) && EnchantmentHelper.getLevel(Enchantments.PIERCING, stack) == 0;
     }
 }
 

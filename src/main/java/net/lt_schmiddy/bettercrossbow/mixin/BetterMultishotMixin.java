@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 // import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.lt_schmiddy.bettercrossbow.ModEntry;
+import net.lt_schmiddy.bettercrossbow.config.ConfigHandler;
 
 
 
@@ -15,7 +15,7 @@ import net.lt_schmiddy.bettercrossbow.ModEntry;
 public class BetterMultishotMixin {
 	@Inject(at = @At("RETURN"), method = "getMaxLevel()I", cancellable = true)
 	private void init(CallbackInfoReturnable<Object> info) {
-	info.setReturnValue(ModEntry.maxMultishotLevel);
+	info.setReturnValue(ConfigHandler.config.maxMultishotLevel);
 
 	}
 }

@@ -14,8 +14,7 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.RangedWeaponItem;
 
-
-import net.lt_schmiddy.bettercrossbow.ModEntry;
+import net.lt_schmiddy.bettercrossbow.config.ConfigHandler;
 @Mixin(net.minecraft.enchantment.FlameEnchantment.class)
 public class FlameEnchantOnCrossbowMixin extends Enchantment {
 
@@ -27,7 +26,7 @@ public class FlameEnchantOnCrossbowMixin extends Enchantment {
 	@Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack) || (
-			ModEntry.flameOnCrossbow 
+			ConfigHandler.config.flameOnCrossbow 
 			&& stack.getItem() instanceof RangedWeaponItem
 		);
 

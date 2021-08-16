@@ -25,7 +25,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 
-import net.lt_schmiddy.bettercrossbow.ModEntry;
+import net.lt_schmiddy.bettercrossbow.config.ConfigHandler;
 
 
 @Mixin(net.minecraft.item.CrossbowItem.class)
@@ -80,22 +80,22 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         PersistentProjectileEntity arrowEntity = info.getReturnValue();
         
         //Increasing Base Damage:
-        arrowEntity.setDamage(arrowEntity.getDamage() + ModEntry.crossbowBaseDamageIncrease);
+        arrowEntity.setDamage(arrowEntity.getDamage() + ConfigHandler.config.crossbowBaseDamageIncrease);
 
         // Adding effects for enchantments to arrows. This is straight out of the BowItem firing code.
         // - Power
 
         int powerLevel = EnchantmentHelper.getLevel(Enchantments.POWER, crossbow);
-        if (powerLevel > 0 && ModEntry.powerOnCrossbow) {
+        if (powerLevel > 0 && ConfigHandler.config.powerOnCrossbow) {
             arrowEntity.setDamage(arrowEntity.getDamage() + (double)powerLevel * 0.5D + 0.5D);
         }
         // - Punch
         int punchLevel = EnchantmentHelper.getLevel(Enchantments.PUNCH, crossbow);
-        if (punchLevel > 0 && ModEntry.punchOnCrossbow) {
+        if (punchLevel > 0 && ConfigHandler.config.punchOnCrossbow) {
             arrowEntity.setPunch(punchLevel);
         }
         // - Flame
-        if (EnchantmentHelper.getLevel(Enchantments.FLAME, crossbow) > 0 && ModEntry.flameOnCrossbow) {
+        if (EnchantmentHelper.getLevel(Enchantments.FLAME, crossbow) > 0 && ConfigHandler.config.flameOnCrossbow) {
             arrowEntity.setOnFireFor(100);
         }
 	}
@@ -115,10 +115,11 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         boolean bl = (
             shooter instanceof PlayerEntity 
             && (
-                ((PlayerEntity)shooter).abilities.creativeMode 
-                || (
+                // ((PlayerEntity)shooter).abilities.creativeMode 
+                // || 
+                (
                     EnchantmentHelper.getLevel(Enchantments.INFINITY, projectile) > 0
-                    && ModEntry.infinityOnCrossbow
+                    && ConfigHandler.config.infinityOnCrossbow
                 )
             )
         );
@@ -158,11 +159,11 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
         List<ItemStack> list = getProjectiles(stack);
         float[] fs = getSoundPitches(entity.getRandom());
 
-        if (ModEntry.piercingSpeedUpArrows) {
+        if (ConfigHandler.config.piercingSpeedUpArrows) {
             int piercingLevel = EnchantmentHelper.getLevel(Enchantments.PIERCING, stack);
 
             if (piercingLevel > 0) {
-                float piercing_mod = ((float)(piercingLevel) * ModEntry.piercingSpeedIncreasePerLevel);
+                float piercing_mod = ((float)(piercingLevel) * ConfigHandler.config.piercingSpeedIncreasePerLevelCrossbow);
                 // System.out.println("piercing_mod: " + piercing_mod);
                 // System.out.println("qf_mod: " + qf_mod);
                 speed = speed + speed * (piercing_mod);
@@ -178,13 +179,14 @@ public abstract class CrossbowEnchantmentHandlerMixin extends RangedWeaponItem {
             boolean bl = 
                 entity instanceof PlayerEntity 
                 && (
-                    ((PlayerEntity)entity).abilities.creativeMode 
-                    || (
+                    // ((PlayerEntity)entity).abilities.creativeMode 
+                    // || 
+                    (
                         EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0
-                        && ModEntry.infinityOnCrossbow
+                        && ConfigHandler.config.infinityOnCrossbow
                     )
                     || (
-                        ModEntry.cantRecoverPiercingMultishotArrows
+                        ConfigHandler.config.cantRecoverPiercingMultishotArrows
                         && (
                             EnchantmentHelper.getLevel(Enchantments.MULTISHOT, stack) > 0
                             || EnchantmentHelper.getLevel(Enchantments.PIERCING, stack) > 0

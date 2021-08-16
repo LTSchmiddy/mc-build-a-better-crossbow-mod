@@ -6,11 +6,13 @@
   "mixins": [
     "BetterMultishotMixin",
     "BetterQuickchargeMixin",
+    "BowEnchantmentHelperMixin",
     "CrossbowEnchantmentHandlerMixin",
     "FlameEnchantOnCrossbowMixin",
     "InfinityEnchantOnCrossbowMixin",
     "PowerEnchantOnCrossbowMixin",
-    "PunchEnchantOnCrossbowMixin"
+    "PunchEnchantOnCrossbowMixin",
+    "PiercingEnchantOnBowMixin"
   ],
   "injectors": {
     "defaultRequire": 1
