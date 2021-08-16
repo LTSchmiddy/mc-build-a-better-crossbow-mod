@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.lt_schmiddy.bettercrossbow.ModEntry"
+      "net.lt_schmiddy.bettercrossbow.BetterCrossbowMod"
     ]
   },
   "mixins": [

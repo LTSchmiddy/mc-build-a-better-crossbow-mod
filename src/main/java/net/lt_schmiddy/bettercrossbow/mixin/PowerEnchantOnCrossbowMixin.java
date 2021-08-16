@@ -32,10 +32,12 @@ public class PowerEnchantOnCrossbowMixin extends Enchantment {
         return (
 			super.isAcceptableItem(stack)
 			|| (
-				ConfigHandler.config.powerOnCrossbow 
+				ConfigHandler.config.crossbow.powerOnCrossbow 
 				&& stack.getItem() instanceof RangedWeaponItem
 			)
-		) && EnchantmentHelper.getLevel(Enchantments.PIERCING, stack) == 0;
+		) 
+		&& EnchantmentHelper.getLevel(Enchantments.PIERCING, stack) == 0
+		&& EnchantmentHelper.getLevel(Enchantments.MULTISHOT, stack) == 0;
     }
 }
 

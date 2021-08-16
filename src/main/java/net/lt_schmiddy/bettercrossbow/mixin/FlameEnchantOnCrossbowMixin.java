@@ -26,7 +26,7 @@ public class FlameEnchantOnCrossbowMixin extends Enchantment {
 	@Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack) || (
-			ConfigHandler.config.flameOnCrossbow 
+			ConfigHandler.config.crossbow.flameOnCrossbow 
 			&& stack.getItem() instanceof RangedWeaponItem
 		);
 

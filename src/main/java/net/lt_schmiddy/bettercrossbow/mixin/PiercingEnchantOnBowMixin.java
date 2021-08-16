@@ -1,7 +1,6 @@
 package net.lt_schmiddy.bettercrossbow.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
@@ -20,12 +19,12 @@ public class PiercingEnchantOnBowMixin extends Enchantment {
 		super(weight, type, slotTypes);
 	}
 
-	@Overwrite
+	@Override
     public boolean isAcceptableItem(ItemStack stack) {
         return (
 			super.isAcceptableItem(stack)
 			|| (
-				ConfigHandler.config.piercingOnBow 
+				ConfigHandler.config.bow.piercingOnBow 
 				&& stack.getItem() instanceof BowItem
 			)
 		) && EnchantmentHelper.getLevel(Enchantments.POWER, stack) == 0;

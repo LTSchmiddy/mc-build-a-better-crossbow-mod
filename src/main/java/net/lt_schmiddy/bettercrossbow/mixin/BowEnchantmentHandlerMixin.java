@@ -28,20 +28,18 @@ import net.minecraft.world.World;
 import net.lt_schmiddy.bettercrossbow.config.ConfigHandler;
 
 @Mixin(net.minecraft.item.BowItem.class)
-public class BowEnchantmentHelperMixin extends RangedWeaponItem implements Vanishable {
+public class BowEnchantmentHandlerMixin extends RangedWeaponItem implements Vanishable {
 
-    public BowEnchantmentHelperMixin(Settings settings) {
+    public BowEnchantmentHandlerMixin(Settings settings) {
         super(settings);
     }
 
     @Inject(at = @At("HEAD"), method = "onStoppedUsing", cancellable = true)
     public void modded_bow(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo info) {
-        if (!ConfigHandler.config.piercingOnBow) {
+        if (!ConfigHandler.config.bow.tweakBow) {
             return;
         }
         info.cancel();
-
-        System.out.println("Using overridden bow shot");
 
         if (user instanceof PlayerEntity) {
             PlayerEntity playerEntity = (PlayerEntity) user;
@@ -66,26 +64,35 @@ public class BowEnchantmentHelperMixin extends RangedWeaponItem implements Vanis
 
                         float speed_mult = 1f;
 
-                        int l = EnchantmentHelper.getLevel(Enchantments.PIERCING, stack);
-                        if (l > 0) {
-                            speed_mult = ConfigHandler.config.piercingSpeedIncreasePerLevelBow * l;
-                            persistentProjectileEntity.setPierceLevel((byte)l);
+                        int piercingLevel = EnchantmentHelper.getLevel(Enchantments.PIERCING, stack);
+                        if (piercingLevel > 0) {
+                            if (ConfigHandler.config.piercing.piercingSpeedUpArrows) {
+                                speed_mult += ConfigHandler.config.bow.piercingSpeedIncreasePerLevel * piercingLevel;
+                            }
+                            persistentProjectileEntity.setPierceLevel((byte) piercingLevel);
                         }
                         persistentProjectileEntity.setProperties(playerEntity, playerEntity.getPitch(),
                                 playerEntity.getYaw(), 0.0F, f * 3.0F * speed_mult, 1.0F);
+
                         if (f == 1.0F) {
                             persistentProjectileEntity.setCritical(true);
                         }
 
-                        int j = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
-                        if (j > 0) {
-                            persistentProjectileEntity
-                                    .setDamage(persistentProjectileEntity.getDamage() + (double) j * 0.5D + 0.5D);
+                        int powerLevel = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
+                        if (powerLevel > 0) {
+                            persistentProjectileEntity.setDamage(persistentProjectileEntity.getDamage()
+                                    + (double) powerLevel * ConfigHandler.config.bow.powerDamageIncreasePerLevel
+                                    + ConfigHandler.config.bow.powerDamageIncreasePerLevel);
                         }
 
-                        int k = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
-                        if (k > 0) {
-                            persistentProjectileEntity.setPunch(k);
+                        if (piercingLevel > 0 && ConfigHandler.config.piercing.piercingSpeedUpArrows) {
+                            persistentProjectileEntity.setDamage(persistentProjectileEntity.getDamage()
+                                    - (piercingLevel * ConfigHandler.config.bow.piercingBaseDamageReductionPerLevel));
+                        }
+
+                        int punchLevel = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
+                        if (punchLevel > 0) {
+                            persistentProjectileEntity.setPunch(punchLevel);
                         }
 
                         if (EnchantmentHelper.getLevel(Enchantments.FLAME, stack) > 0) {

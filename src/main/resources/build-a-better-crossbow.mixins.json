@@ -6,7 +6,7 @@
   "mixins": [
     "BetterMultishotMixin",
     "BetterQuickchargeMixin",
-    "BowEnchantmentHelperMixin",
+    "BowEnchantmentHandlerMixin",
     "CrossbowEnchantmentHandlerMixin",
     "FlameEnchantOnCrossbowMixin",
     "InfinityEnchantOnCrossbowMixin",

@@ -2,7 +2,6 @@ package net.lt_schmiddy.bettercrossbow.mixin;
 
 // import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -21,18 +20,18 @@ public class BetterQuickchargeMixin extends Enchantment {
 		//
 	}
 
-	@Overwrite
+	@Override
 	public int getMaxLevel() {
 		// System.out.println("ModEntry.maxQuickChargeLevel : " + ModEntry.maxQuickChargeLevel);
-		return ConfigHandler.config.maxQuickChargeLevel;
+		return ConfigHandler.config.misc.maxQuickChargeLevel;
 	}
 
-	@Overwrite
+	@Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack)
 		&& (
 			EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) == 0
-			|| !ConfigHandler.config.infinityQuickchargeConflict
+			|| !ConfigHandler.config.crossbow.infinityQuickchargeConflict
 		);
     }
 }

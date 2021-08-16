@@ -28,7 +28,7 @@ public class PunchEnchantOnCrossbowMixin extends Enchantment {
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack)
 		|| (
-			ConfigHandler.config.punchOnCrossbow 
+			ConfigHandler.config.crossbow.punchOnCrossbow 
 			&& stack.getItem() instanceof RangedWeaponItem
 		);
     }

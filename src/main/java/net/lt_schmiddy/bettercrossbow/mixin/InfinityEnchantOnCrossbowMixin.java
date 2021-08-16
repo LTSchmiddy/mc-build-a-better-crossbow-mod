@@ -31,12 +31,12 @@ public class InfinityEnchantOnCrossbowMixin extends Enchantment {
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack) 
         || (
-			ConfigHandler.config.infinityOnCrossbow 
+			ConfigHandler.config.crossbow.infinityOnCrossbow 
 			&& (
                 stack.getItem() instanceof RangedWeaponItem 
                 && (
                     EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack) == 0
-                    || !ConfigHandler.config.infinityQuickchargeConflict
+                    || !ConfigHandler.config.crossbow.infinityQuickchargeConflict
                 )
                 && EnchantmentHelper.getLevel(Enchantments.MENDING, stack) == 0
 
