@@ -71,8 +71,9 @@ public class BowEnchantmentHandlerMixin extends RangedWeaponItem implements Vani
                             }
                             persistentProjectileEntity.setPierceLevel((byte) piercingLevel);
                         }
-                        persistentProjectileEntity.setProperties(playerEntity, playerEntity.getPitch(),
+                        persistentProjectileEntity.setVelocity(playerEntity, playerEntity.getPitch(),
                                 playerEntity.getYaw(), 0.0F, f * 3.0F * speed_mult, 1.0F);
+
 
                         if (f == 1.0F) {
                             persistentProjectileEntity.setCritical(true);
