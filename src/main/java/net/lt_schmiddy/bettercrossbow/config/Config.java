@@ -14,7 +14,7 @@ public class Config {
 
 		public double powerDamageIncreasePerLevel = 0.5D;
 		public float piercingSpeedIncreasePerLevel = 0.5f;
-		public float piercingBaseDamageReductionPerLevel = 0.3f;
+		public float piercingBaseDamageReductionPerLevel = 0.35f;
 	} public CrossbowConfig crossbow = new CrossbowConfig();
 
 	public static class BowConfig {
