@@ -18,11 +18,11 @@ public class Config {
 	} public CrossbowConfig crossbow = new CrossbowConfig();
 
 	public static class BowConfig {
-		public boolean tweakBow = true;
+		public boolean tweakBow = false;
 
-		public double powerDamageIncreasePerLevel = 0.7D;
+		public double powerDamageIncreasePerLevel = 0.5D;
 
-		public boolean piercingOnBow = true;
+		public boolean piercingOnBow = false;
 		public float piercingSpeedIncreasePerLevel = 0.5f;
 		public float piercingBaseDamageReductionPerLevel = 0.1f;
 	} public BowConfig bow = new BowConfig();
